@@ -7,14 +7,6 @@
   font-size: 22px;
   color: #191d1e;
   transition: all, 250ms;
-
-  &:hover {
-    color:  #b91212;
-  }
-}
-
-.headerLink.active {
-  color:  #b91212;
 }
 
 .header {

@@ -31,3 +31,12 @@
     background-color: rgba(175, 139, 139, 0.788);
     transition: all 0.3s;
   }
+
+  .notification {
+    margin-top: 50px;
+    margin-left: 10px;
+    font-size: 20px;
+    width: 400px;
+    text-align: center;
+    color:  #856a6a;
+  }

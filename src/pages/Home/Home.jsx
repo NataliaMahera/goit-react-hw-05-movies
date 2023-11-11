@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchTrending } from '../../servises/themoviedbAPI';
+import { Notify } from 'notiflix';
 import TrandingHomeList from 'components/TrandingHomeList/TrandingHomeList';
 import Loader from 'components/Loader/Loader';
-import { Notify } from 'notiflix';
-import css from './Home.module.css';
 
 const Home = () => {
   const [films, setFilms] = useState(null);
@@ -32,7 +31,6 @@ const Home = () => {
   return (
     <>
       {loading && <Loader />}
-      <h1 className={css.title}>Trending today</h1>
       <TrandingHomeList films={films} />
     </>
   );

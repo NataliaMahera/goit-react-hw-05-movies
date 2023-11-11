@@ -1,7 +1,7 @@
 import Loader from 'components/Loader/Loader';
 import MoviesList from 'components/MoviesList/MoviesList';
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Form, useSearchParams } from 'react-router-dom';
 import { Notify } from 'notiflix';
 import { fetchSearchByKeyWord } from 'servises/themoviedbAPI';
 import css from './Movies.module.css';
@@ -10,6 +10,7 @@ const Movies = () => {
   const [searchedMovies, setSearchedMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [noMoviesText, setNoMoviesText] = useState(false);
 
   //Значення з пошукового параметру, який записується в ключ query
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,15 +32,17 @@ const Movies = () => {
         setLoading(true);
         setError(null);
 
-        await fetchSearchByKeyWord(queryValue).then(results =>
-          setSearchedMovies(results)
-        );
+        await fetchSearchByKeyWord(queryValue).then(results => {
+          setSearchedMovies(results);
+          setNoMoviesText(results.length === 0);
+        });
 
         // if (searchedMovies.length === 0) {
         //   return Notify.warning(
         //     'Sorry, there are no movies matching your search query. Please try again.'
         //   );
         // }
+
         const newQueryValue = queryValue.trim();
         if (!newQueryValue) {
           return Notify.warning('Please, fill the main field');
@@ -57,7 +60,6 @@ const Movies = () => {
   return (
     <>
       {loading && <Loader />}
-
       <form className={css.searchForm} onSubmit={onFormSubmit}>
         <label className={css.label}>
           <input
@@ -69,19 +71,15 @@ const Movies = () => {
         </label>
         <button type="submit">search</button>
       </form>
+      {noMoviesText && (
+        <p className={css.notification}>
+          Sorry, there are no movies matching your search query. Please try
+          again.
+        </p>
+      )}
       {searchedMovies && <MoviesList searchedMovies={searchedMovies} />}
     </>
   );
 };
 
 export default Movies;
-
-// const {
-//   data: { results, total_results },
-// } = await axios.get(
-//   `search/movie?include_adult=false&api_key=${API_KEY}&language=en-US&page=1&query=${queryValue}`
-// );
-// setSearchedMovies(results);
-
-// const location = useLocation();
-// console.log('First location', location);

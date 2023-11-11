@@ -1,17 +1,18 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import css from './Layout.module.css';
+import { ActivePage } from './Layout.styled';
 
 const Layout = ({ children }) => {
   return (
     <>
       <header className={css.header}>
         <nav>
-          <NavLink className={css.headerLink} to="/">
+          <ActivePage className={css.headerLink} to="/">
             Home
-          </NavLink>
-          <NavLink className={css.headerLink} to="/movies">
+          </ActivePage>
+          <ActivePage className={css.headerLink} to="/movies">
             Movies
-          </NavLink>
+          </ActivePage>
         </nav>
       </header>
       <main>{children}</main>
