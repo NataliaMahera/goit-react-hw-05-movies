@@ -1,7 +1,7 @@
 import Loader from 'components/Loader/Loader';
 import MoviesList from 'components/MoviesList/MoviesList';
 import React, { useEffect, useState } from 'react';
-import { Form, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Notify } from 'notiflix';
 import { fetchSearchByKeyWord } from 'servises/themoviedbAPI';
 import css from './Movies.module.css';
