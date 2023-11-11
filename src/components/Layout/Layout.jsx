@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import css from './Layout.module.css';
 import { ActivePage } from './Layout.styled';
 
