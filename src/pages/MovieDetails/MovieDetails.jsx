@@ -86,10 +86,3 @@ const MovieDetails = () => {
 };
 
 export default MovieDetails;
-
-{
-  /* <>
-<img src={defaultImg} alt={movie?.original_title} />
-<p>The resource you requested could not be found</p>
-</> */
-}
