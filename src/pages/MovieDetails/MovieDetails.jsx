@@ -1,13 +1,26 @@
-import Loader from 'components/Loader/Loader';
-import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes, useParams } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { fetchSelectedTrending } from 'servises/themoviedbAPI';
+import Loader from 'components/Loader/Loader';
+import { Notify } from 'notiflix';
 import css from './MovieDetails.module.css';
-import Cast from 'pages/Cast/Cast';
-import Reviews from 'pages/Reviews/Reviews';
+// import Cast from 'components/Cast/Cast';
+// import Reviews from 'components/Reviews/Reviews';
+// import TrendingMovieItem from 'components/TrendingMovieItem/TrendingMovieItem';
+
+const TrendingMovieItem = lazy(() =>
+  import('components/TrendingMovieItem/TrendingMovieItem')
+);
+const Cast = lazy(() => import('components/Cast/Cast'));
+const Reviews = lazy(() => import('components/Reviews/Reviews'));
 
 const MovieDetails = () => {
   const { movieId } = useParams();
+
+  const location = useLocation();
+  // console.log('location from MovieDetails', location);
+  const backLinkRef = useRef(location.state?.from ?? '/');
+
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -18,6 +31,7 @@ const MovieDetails = () => {
     const fetchSelectedTrendingFilm = async () => {
       try {
         setLoading(true);
+        setError(null);
 
         await fetchSelectedTrending(movieId).then(data => {
           setMovie(data);
@@ -25,6 +39,7 @@ const MovieDetails = () => {
         });
       } catch {
         setError(error);
+        Notify.failure('Oops, something went wrong!');
       } finally {
         setLoading(false);
       }
@@ -32,69 +47,49 @@ const MovieDetails = () => {
     fetchSelectedTrendingFilm();
   }, [movieId, error]);
 
-  const {
-    release_date,
-    vote_average,
-    overview,
-    genres,
-    poster_path,
-    original_title,
-  } = movie || {};
-
-  const defaultImg =
-    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
-
   return (
-    <div>
+    <main>
+      <Link className={css.btnGoBack} to={backLinkRef.current}>
+        Go Back
+      </Link>
       {loading && <Loader />}
-      {!movie ? (
+      {movie && (
         <>
-          <img src={defaultImg} alt={original_title} />
-          <p>The resource you requested could not be found</p>
-        </>
-      ) : (
-        <>
-          <div>
-            <img
-              src={`https:image.tmdb.org/t/p/w500/${poster_path}`}
-              alt={original_title}
-            />
-            <h2>
-              {original_title} ({release_date.slice(0, 4)})
-            </h2>
-            <p>User Score: {Math.round(vote_average)}</p>
-            <h3>Overview</h3>
-            <p>{overview}</p>
-            <h3>Genres</h3>
-            <ul>
-              {genres?.map(({ name, id }) => (
-                <li key={id}>{name}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3>Aditional information</h3>
-            <ul>
-              <li>
-                <Link className={css.cast} to="cast">
+          <TrendingMovieItem movie={movie} />
+
+          <div className={css.container}>
+            <h3 className={css.title}>Aditional information</h3>
+            <ul className={css.list}>
+              <li className={css.item}>
+                <Link className={css.link} to="cast">
                   Cast
                 </Link>
               </li>
-              <li>
-                <Link className={css.reviews} to="reviews">
+              <li className={css.item}>
+                <Link className={css.link} to="reviews">
                   Reviews
                 </Link>
               </li>
             </ul>
+          </div>
+
+          <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="cast" element={<Cast />} />
               <Route path="reviews" element={<Reviews />} />
             </Routes>
-          </div>
+          </Suspense>
         </>
       )}
-    </div>
+    </main>
   );
 };
 
 export default MovieDetails;
+
+{
+  /* <>
+<img src={defaultImg} alt={movie?.original_title} />
+<p>The resource you requested could not be found</p>
+</> */
+}

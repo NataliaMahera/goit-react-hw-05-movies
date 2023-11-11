@@ -27,7 +27,14 @@ export const fetchCast = async movieId => {
 
 export const fetchReviews = async movieId => {
   const { data } = await axios.get(
-    `movie/${movieId}/reviews?api_key=${API_KEY}&language=en-US`
+    `movie/${movieId}/reviews?api_key=${API_KEY}&language=en-US&page=1`
+  );
+  return data.results;
+};
+
+export const fetchSearchByKeyWord = async keyword => {
+  const { data } = await axios.get(
+    `search/movie?include_adult=false&api_key=${API_KEY}&language=en-US&page=1&query=${keyword}`
   );
   return data.results;
 };

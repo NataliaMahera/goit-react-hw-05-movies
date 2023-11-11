@@ -1,0 +1,23 @@
+.headerLink {
+  display: inline-block;
+  text-decoration: none;
+  padding: 14px;
+  margin-left: 50px;
+  font-weight: 600;
+  font-size: 22px;
+  color: #191d1e;
+  transition: all, 250ms;
+
+  &:hover {
+    color:  #b91212;
+  }
+}
+
+.headerLink.active {
+  color:  #b91212;
+}
+
+.header {
+  border-bottom: solid 1px grey;
+  margin-bottom: 20px;
+}
