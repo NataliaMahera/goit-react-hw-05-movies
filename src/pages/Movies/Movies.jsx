@@ -18,10 +18,12 @@ const Movies = () => {
 
   const onFormSubmit = e => {
     e.preventDefault();
-    const value = e.currentTarget.elements.searchKey.value;
+    const form = e.currentTarget;
+    const value = e.currentTarget.elements.searchKey.value.trim();
 
     //Зміна обєкту пошукових параметрів після сабміту форми
     setSearchParams({ query: value });
+    form.reset();
   };
 
   useEffect(() => {
@@ -36,12 +38,6 @@ const Movies = () => {
           setSearchedMovies(results);
           setNoMoviesText(results.length === 0);
         });
-
-        // if (searchedMovies.length === 0) {
-        //   return Notify.warning(
-        //     'Sorry, there are no movies matching your search query. Please try again.'
-        //   );
-        // }
 
         const newQueryValue = queryValue.trim();
         if (!newQueryValue) {
