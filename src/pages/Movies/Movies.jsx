@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Notify } from 'notiflix';
 import { fetchSearchByKeyWord } from 'servises/themoviedbAPI';
-import css from './Movies.module.css';
 import Form from 'components/Form/Form';
 
 const Movies = () => {
